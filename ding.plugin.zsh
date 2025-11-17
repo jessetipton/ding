@@ -47,11 +47,16 @@ ding__precmd() {
   local exit_status=$?
   emulate -L zsh
 
+  if (( _ding_last_cmd_started_at <= 0 )); then
+    return
+  fi
+
   local now duration
 
   zmodload zsh/datetime 2>/dev/null
   now=$EPOCHREALTIME
   (( duration = now - _ding_last_cmd_started_at ))
+  _ding_last_cmd_started_at=0
 
   if (( duration < DING_MIN_DURATION )); then
     return
