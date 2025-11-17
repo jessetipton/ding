@@ -1,18 +1,18 @@
 # ding
 
-`ding` is a tiny Zsh plugin for macOS that plays one of the built-in system sounds after a long-running command finishes. It gives you a quick audible confirmation without needing to stare at the terminal: a positive sound for successful commands and a negative sound when something fails.
+`ding` is a lightweight Zsh plugin that plays notification sounds when a long-running shell command completes.
 
 ## Requirements
 
-- macOS (relies on `/System/Library/Sounds` and `afplay`)
-- Zsh 5.4+ (anything that provides `EPOCHREALTIME` and `add-zsh-hook`)
+- macOS
+- Zsh 5.4+
 
 ## Installation
 
 Clone this repository somewhere on your machine, then source the plugin from your `.zshrc`:
 
 ```zsh
-git clone https://github.com/your-user/ding.git ~/.zsh/ding
+git clone https://github.com/jessetipton/ding.git ~/.zsh/ding
 source ~/.zsh/ding/ding.plugin.zsh
 ```
 
@@ -27,9 +27,9 @@ All configuration is done through environment variables that can be set before s
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `DING_MIN_DURATION` | `5` | Minimum command runtime (seconds) required before a sound plays. Accepts floats, e.g. `1.5`. |
+| `DING_MIN_DURATION` | `5` | Minimum command runtime (in seconds) required before a sound plays. |
 | `DING_SUCCESS_SOUND` | `Glass` | Name of the system sound (`/System/Library/Sounds/<name>.aiff`) to use for successful commands. |
-| `DING_FAILURE_SOUND` | `Basso` | Sound to play when the command exits with a non-zero status. |
+| `DING_FAILURE_SOUND` | `Basso` | Name of the system sound to play when the command exits with a non-zero status. |
 
 Example configuration:
 
@@ -37,11 +37,6 @@ Example configuration:
 export DING_MIN_DURATION=3
 export DING_SUCCESS_SOUND=Hero
 export DING_FAILURE_SOUND=Sosumi
-source ~/.zsh/ding/ding.plugin.zsh
 ```
 
 You can run `ls /System/Library/Sounds` to see the available sound names.
-
-## How it works
-
-`ding` registers lightweight `preexec` and `precmd` hooks. The `preexec` hook records when each foreground command starts, and the `precmd` hook fires after the command finishes. If the runtime exceeds your configured threshold, the plugin plays either the success or failure sound asynchronously via `afplay`, so your prompt remains responsive.
