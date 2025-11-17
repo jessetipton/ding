@@ -44,9 +44,9 @@ ding__preexec() {
 }
 
 ding__precmd() {
+  local exit_status=$?
   emulate -L zsh
 
-  local exit_status=$?
   local now duration
 
   zmodload zsh/datetime 2>/dev/null
